@@ -1,0 +1,28 @@
+{
+  "name": "webpack-intro",
+  "version": "1.0.0",
+  "description": "my first project",
+  "main": "bundle.js",
+  "dependencies": {
+    "react": "^0.14.7",
+    "webpack": "^1.12.13",
+    "webpack-dev-server": "^1.14.1"
+  },
+  "devDependencies": {
+    "babel-core": "^6.5.2",
+    "babel-loader": "^6.2.2",
+    "babel-preset-es2015": "^6.5.0",
+    "babel-preset-react": "^6.5.0",
+    "css-loader": "^0.23.1",
+    "sass-loader": "^3.1.2",
+    "style-loader": "^0.13.0",
+    "url-loader": "^0.5.7"
+  },
+  "scripts": {
+    "build": "webpack",
+    "dev": "webpack-dev-server --devtool eval --progress --colors --hot --content-base build --port 3388",
+    "deploy": "NODE_ENV=production webpack -p --config webpack.production.config.js"
+  },
+  "author": "",
+  "license": "ISC"
+}
