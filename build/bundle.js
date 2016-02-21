@@ -44,19 +44,17 @@
 /* 0 */
 /***/ function(module, exports, __webpack_require__) {
 
-	//require("./style.css");
-	//document.write(require("./content.js"));
-
 	var component = __webpack_require__(1);
+	var app = document.createElement('div');
 
+	document.body.appendChild(app);
 
-	document.body.appendChild(component());
+	app.appendChild(component());
 
 /***/ },
 /* 1 */
 /***/ function(module, exports) {
 
-	
 	module.exports = function () {
 	    var element = document.createElement('h1');
 
