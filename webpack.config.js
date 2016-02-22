@@ -109,6 +109,9 @@ if(TARGET === 'start' || !TARGET) {
 
 if(TARGET === 'build') {
     module.exports = merge(common, {
-
+        plugins: [
+            new webpack.optimize.CommonsChunkPlugin("vendor", "vendor.bundle.js")
+            //new webpack.optimize.UglifyJsPlugin({minimize: true})
+        ]
     });
 }
