@@ -1,9 +1,11 @@
 import React from 'react';
+import Actions from '../actions';
 
 export default React.createClass({
 
     onClick(){
-        this.props.onChange(this.props.tab.key);
+        Actions.onSelect(this.props.tab.key);
+        //this.props.onChange(this.props.tab.key);
     },
     render(){
         var tab = this.props.tab;

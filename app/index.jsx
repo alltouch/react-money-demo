@@ -1,3 +1,4 @@
+import 'bootstrap.css';
 import './style.scss';
 
 import React from 'react';

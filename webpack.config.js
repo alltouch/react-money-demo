@@ -8,17 +8,23 @@ process.env.BABEL_ENV = TARGET;
 
 const PATHS = {
     app: path.join(__dirname, 'app'),
+    node_modules: path.join(__dirname, 'node_modules'),
     build: path.join(__dirname, 'build')
 };
 
+var pathToBootstrap = PATHS.node_modules + '/bootstrap/dist/css/bootstrap.css';
+
 const common = {
 
-    // Entry accepts a path or an object of entries. We'll be using the
-    // latter form given it's convenient with more complex configurations.
+
     entry: {
-        app: PATHS.app
+        app: PATHS.app,
+        vendor: ['react', 'react-dom', 'bootstrap.css']
     },
     resolve: {
+        alias: {
+            'bootstrap.css': pathToBootstrap
+        },
         extensions: ['', '.js', '.jsx']
     },
     output: {
@@ -28,6 +34,10 @@ const common = {
     module: {
         loaders: [
             {
+                test: /\.css$/,
+                loaders: ['style', 'css']
+            },
+            {
                 // Test expects a RegExp! Note the slashes!
                 test: /\.scss$/,
                 loaders: ['style', 'css', 'sass'],
@@ -35,7 +45,7 @@ const common = {
                 include: PATHS.app
             },
             {
-                test: /\.(png|jpg)$/,
+                test: /\.(eot|woff|woff2|ttf|svg|png|jpg)$/,
                 loader: 'url?limit=15000'
             },
             {
@@ -88,6 +98,7 @@ if(TARGET === 'start' || !TARGET) {
             port: process.env.PORT || 3388
         },
         plugins: [
+            new webpack.optimize.CommonsChunkPlugin("vendor", "vendor.bundle.js"),
             new webpack.HotModuleReplacementPlugin(),
             new NpmInstallPlugin({
                 save: true // --save
