@@ -1,11 +1,15 @@
 import React from 'react';
 
 import './account-list.scss';
+import Actions from './../../actions';
 import AccountLine from './account-line.jsx';
 
 export default React.createClass({
+    onRemoveClick(){
+        Actions.removeOpenedTab();
+    },
     render(){
-        if(!this.props.data || this.props.data.length === 0){
+        if(!this.props.accounts || this.props.accounts.length === 0){
             return <div className="account-list empty">No accounts</div>;
         }
 
@@ -15,9 +19,14 @@ export default React.createClass({
             currency: 'USD'
         };
 
+        var showButtons = !this.props.isTotal;
+
         return (
             <div className="account-list">
-                <button className="btn btn-danger pull-right">Remove Tab</button>
+
+                {showButtons ?
+                    <button className="btn btn-danger pull-right" onClick={this.onRemoveClick}>Remove Tab</button>
+                    : ''}
 
                 <table className="table table-striped">
                     <thead>
@@ -29,14 +38,17 @@ export default React.createClass({
                         </tr>
                     </thead>
                     <tbody>
-                        {this.props.data.map(line =>
+                        {this.props.accounts.map(line =>
                             <AccountLine key={line.key} line={line} />
                         )}
                         <AccountLine key="total" line={total} />
                     </tbody>
                 </table>
 
-                <button className="btn btn-default pull-right">Add Account</button>
+                {showButtons ?
+                    <button className="btn btn-default pull-right">Add Account</button>
+                    : ''}
+
             </div>
         );
     }

@@ -13,10 +13,13 @@ export default class App extends React.Component {
     }
 
     render() {
+        var isTotal = this.state.tabs.filter(tab => tab.key === 0)[0].active;
+        var accounts = Actions.calculateAccounts();
+
         return (
             <div>
                 <Menu tabs={this.state.tabs} />
-                <AccountList data={this.state.accounts} />
+                <AccountList accounts={accounts} isTotal={isTotal} />
             </div>
         );
     }

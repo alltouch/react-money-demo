@@ -14,8 +14,7 @@ export default {
         });
 
         this.setState({
-            tabs,
-            accounts: this.calculateAccounts(tabs)
+            tabs
         }, true);
     },
     setState(data, onInit){
@@ -49,9 +48,7 @@ export default {
             active: false,
             accounts: []
         });
-        this.setState({
-            tabs
-        });
+        this.updateTabs(tabs);
         this.selectTab(key);
 
     },
@@ -60,14 +57,40 @@ export default {
         tabs.filter(tab => tab.active).forEach(tab => tab.active = false);
         tabs.filter(tab => tab.key === key).forEach(tab => tab.active = true);
 
+        this.updateTabs(tabs);
+    },
+
+    updateTabs(tabs){
         this.setState({
-            tabs,
-            accounts: this.calculateAccounts(tabs)
+            tabs
         });
     },
 
-    calculateAccounts(tabs){
+    removeOpenedTab(){
+        var tabs = this.getState().tabs;
         var active = tabs.filter(tab => tab.active)[0];
+        var index = tabs.indexOf(active);
+        tabs.splice(index, 1);
+
+        tabs[index - 1].active = true;
+
+        this.setState({
+           tabs
+        });
+    },
+
+    editTabName(key, name){
+        var tabs = this.getState().tabs;
+        var tab = tabs.filter(tab => tab.key === key)[0];
+        tab.name = name;
+
+        this.setState({
+            tabs
+        });
+    },
+
+    calculateAccounts(){
+        var active = this.getState().tabs.filter(tab => tab.active)[0];
 
         return [{
             key: 'xx',

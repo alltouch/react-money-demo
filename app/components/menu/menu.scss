@@ -3,6 +3,49 @@
         &.active, &:hover {
             cursor: pointer;
         }
+
+        &.tab-total, &.tab-editable{
+            span{
+                display: none;
+            }
+        }
+
+        &.tab-editable.active{
+            a{
+                padding-right: 30px;
+            }
+
+            input{
+                position: relative;
+                top: -7px;
+                margin-bottom: -14px;
+            }
+
+            span{
+                position: absolute;
+                top: 15px;
+                right: 10px;
+
+                &.glyphicon-remove{
+                    display: inline-block;
+                    top: 5px;
+                    color: red;
+                }
+
+                &.glyphicon-ok{
+                    display: inline-block;
+                    top: 20px;
+                    color: green;
+                }
+            }
+
+            &:hover{
+                span.glyphicon-pencil{
+                    display: inline-block;
+                }
+            }
+        }
+
     }
     li2 {
         display: inline-block;
