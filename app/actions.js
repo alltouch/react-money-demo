@@ -14,7 +14,10 @@ export default {
         });
 
         this.setState({
-            tabs
+            tabs,
+            currencies: ['USD', 'EUR'],
+            currenciesUI: ['All', 'USD', 'EUR'],
+            currency: 'All'
         }, true);
     },
     setState(data, onInit){
@@ -89,15 +92,22 @@ export default {
         });
     },
 
+    setCurrency(currency){
+        this.setState({
+            currency
+        });
+    },
+
     calculateAccounts(){
-        var active = this.getState().tabs.filter(tab => tab.active)[0];
+        var state = this.getState();
+        var active = state.tabs.filter(tab => tab.active)[0];
 
         return [{
             key: 'xx',
             tabName: active.name,
             name: 'test name ',
             amount: active.accounts.length,
-            currency: 'USD'
+            currency: state.currency
         }];
     }
 };

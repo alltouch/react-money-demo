@@ -1,4 +1,6 @@
 .main-menu {
+    margin-bottom: 20px;
+
     li{
         &.active, &:hover {
             cursor: pointer;
@@ -44,18 +46,6 @@
                     display: inline-block;
                 }
             }
-        }
-
-    }
-    li2 {
-        display: inline-block;
-        padding: 10px;
-        border: 1px solid #ccc;
-        border-radius: 5px 5px 0 0;
-
-        &.active, &:hover {
-            background: #ccc;
-            cursor: pointer;
         }
 
     }

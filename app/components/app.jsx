@@ -12,14 +12,40 @@ export default class App extends React.Component {
         Actions.init(this);
     }
 
+    onRemoveClick(){
+        Actions.removeOpenedTab();
+    }
+
+    changeCurrency(currency){
+        return function (){
+            Actions.setCurrency(currency);
+        };
+    }
+
     render() {
         var isTotal = this.state.tabs.filter(tab => tab.key === 0)[0].active;
-        var accounts = Actions.calculateAccounts();
+        var showButtons = !isTotal;
 
         return (
             <div>
                 <Menu tabs={this.state.tabs} />
-                <AccountList accounts={accounts} isTotal={isTotal} />
+                {showButtons ?
+                    <button className="btn btn-danger pull-right" onClick={this.onRemoveClick}>Remove Tab</button>
+                    : ''}
+
+                <div className="btn-group">
+                    {this.state.currenciesUI.map(currency => (
+                        <button key={currency} onClick={this.changeCurrency(currency)}
+                                className={'btn btn-default' + (currency === this.state.currency ? 'active': '')}
+                        >{currency}</button>
+                    ))}
+                </div>
+
+                <AccountList />
+
+                {showButtons ?
+                    <button className="btn btn-default pull-right">Add Account</button>
+                    : ''}
             </div>
         );
     }
