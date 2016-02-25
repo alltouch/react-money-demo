@@ -19,7 +19,7 @@ export default React.createClass({
         return (
             <tr>
                 <td>
-                    {line.name}
+                    {line.name} &nbsp;
                     <span className="label label-default">{line.tabName}</span>
                 </td>
                 <td>{line.amount}</td>

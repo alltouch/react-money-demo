@@ -4,6 +4,7 @@ import './app.scss';
 import Menu from './menu/menu.jsx';
 import Actions from '../actions';
 import AccountList from './list/account-list.jsx';
+import AddDialog from './add-dialog/add-dialog.jsx';
 
 export default class App extends React.Component {
     constructor(props) {
@@ -20,6 +21,10 @@ export default class App extends React.Component {
         return function (){
             Actions.setCurrency(currency);
         };
+    }
+
+    showAddDialog(){
+        Actions.showAddDialog();
     }
 
     render() {
@@ -44,7 +49,11 @@ export default class App extends React.Component {
                 <AccountList />
 
                 {showButtons ?
-                    <button className="btn btn-default pull-right">Add Account</button>
+                    <button className="btn btn-default pull-right" onClick={this.showAddDialog}>Add Account</button>
+                    : ''}
+
+                {this.state.showDialog ?
+                    <AddDialog />
                     : ''}
             </div>
         );

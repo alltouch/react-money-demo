@@ -4,7 +4,7 @@ export default {
         this.initTabs();
     },
     initTabs(){
-        var tabs = ['Всего', 'Банка 1', 'Банка 2'].map((name, index) => {
+        var tabs = ['Всего'].map((name, index) => {
             return {
                 key: index,
                 name,
@@ -17,7 +17,9 @@ export default {
             tabs,
             currencies: ['USD', 'EUR'],
             currenciesUI: ['All', 'USD', 'EUR'],
-            currency: 'All'
+            currency: 'All',
+            course: 1.1,
+            showDialog: false
         }, true);
     },
     setState(data, onInit){
@@ -101,13 +103,62 @@ export default {
     calculateAccounts(){
         var state = this.getState();
         var active = state.tabs.filter(tab => tab.active)[0];
+        var currency = state.currency;
 
-        return [{
-            key: 'xx',
-            tabName: active.name,
-            name: 'test name ',
-            amount: active.accounts.length,
-            currency: state.currency
-        }];
+        function getDataForTab(tab){
+            return tab.accounts
+                      .filter(account => ['All', account.currency].indexOf(currency) > -1)
+                      .map(account => {
+                            return Object.assign(
+                                {},
+                                account,
+                                {
+                                    tableKey: '' + account.tabKey + '.' + account.key,
+                                    tabName: tab.name
+                                }
+                            );
+                      });
+        }
+
+        if(active.key === 0){
+            var result = [];
+
+            state.tabs.filter(tab => !tab.active)
+                 .forEach(tab => {
+                    result = result.concat(getDataForTab(tab));
+                 });
+
+            return result;
+        }
+
+        return getDataForTab(active);
+    },
+
+    showAddDialog(){
+        this.setState({
+            showDialog: true
+        })
+    },
+
+    hideAddDialog(){
+        this.setState({
+            showDialog: false
+        })
+    },
+
+    addAccount(model){
+        model.amount = parseFloat(model.amount);
+        var tabs = this.getState().tabs;
+        var activeTab = tabs.filter(tab => tab.active)[0];
+        var len = activeTab.accounts.length;
+
+        model.tabKey = activeTab.key;
+        model.key = len > 0 ? activeTab.accounts[len - 1].key + 1 : 1;
+        activeTab.accounts.push(model);
+
+        this.setState({
+            tabs
+        });
+        this.hideAddDialog();
     }
 };

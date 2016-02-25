@@ -8,6 +8,9 @@ export default React.createClass({
 
     render(){
         var accounts = Actions.calculateAccounts();
+        var course = {
+            'EUR': Actions.getState().course
+        };
 
         if(!accounts.length){
             return <div className="account-list empty">No accounts</div>;
@@ -15,7 +18,14 @@ export default React.createClass({
 
         var total = {
             name: 'Total',
-            amount: 3333,
+            amount: accounts.map(account => {
+                if(account.currency === 'USD'){
+                    return account.amount;
+                } else if(course[account.currency]){
+                    return account.amount * course[account.currency];
+                }
+                return 0;
+            }).reduce((prev, current) => prev + current),
             currency: 'USD'
         };
 
@@ -34,7 +44,7 @@ export default React.createClass({
                     </thead>
                     <tbody>
                         {accounts.map(line =>
-                            <AccountLine key={line.key} line={line} />
+                            <AccountLine key={line.tableKey} line={line} />
                         )}
                         <AccountLine key="total" line={total} />
                     </tbody>

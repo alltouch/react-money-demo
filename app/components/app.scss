@@ -1,4 +1,9 @@
 #app{
     width: 800px;
     margin: 20px auto;
+
+    .modal-opened{
+        display: block;
+        background-color: rgba(0, 0, 0, 0.5);
+    }
 }
