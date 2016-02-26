@@ -160,5 +160,34 @@ export default {
             tabs
         });
         this.hideAddDialog();
+    },
+
+    removeAccount(account){
+        var tabs = this.getState().tabs;
+        var currentTab = tabs.filter(tab => tab.key === account.tabKey)[0];
+        var currentAccount = currentTab.accounts.filter(acc => acc.key === account.key)[0];
+        var index = currentTab.accounts.indexOf(currentAccount);
+
+        currentTab.accounts.splice(index, 1);
+
+        this.setState({
+            tabs
+        });
+    },
+
+    updateAccount(account, obj){
+
+        var tabs = this.getState().tabs;
+        var currentTab = tabs.filter(tab => tab.key === account.tabKey)[0];
+        var currentAccount = currentTab.accounts.filter(acc => acc.key === account.key)[0];
+
+        currentAccount.name = obj.name;
+        currentAccount.currency = obj.currency;
+        currentAccount.amount = obj.amount;
+
+        this.setState({
+            tabs
+        });
+
     }
 };

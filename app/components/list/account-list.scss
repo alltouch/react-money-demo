@@ -9,8 +9,24 @@
             text-align: center;
         }
 
-        .glyphicon-pencil{
+        .glyphicon{
+            cursor: pointer;
+        }
+
+        .glyphicon-ok{
+            color: green;
+        }
+
+        .glyphicon-remove{
+            color: red;
+        }
+
+        .glyphicon-pencil, .glyphicon-ok{
             margin-right: 20px;
+        }
+
+        .actions{
+            vertical-align: middle;
         }
     }
 

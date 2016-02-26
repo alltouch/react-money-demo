@@ -6,7 +6,12 @@ export default React.createClass({
         var currencies = Actions.getState().currencies;
 
         return (
-            <select className="form-control" id={this.props.id} value={this.props.value} onChange={this.props.onChange}>
+            <select className="form-control"
+                    id={this.props.id}
+                    value={this.props.value}
+                    defaultValue={this.props.defaultValue}
+                    ref="select"
+                    onChange={this.props.onChange}>
                 <option value="">choose currency</option>
                 {currencies.map(curr =>
                     <option key={curr} value={curr}>{curr}</option>
