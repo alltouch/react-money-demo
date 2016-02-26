@@ -4,6 +4,12 @@ export default {
         this.initTabs();
     },
     initTabs(){
+        var data = window.localStorage.getItem('app');
+        if(data){
+            this.setState(JSON.parse(data), true);
+            return;
+        }
+
         var tabs = ['Всего'].map((name, index) => {
             return {
                 key: index,
@@ -28,6 +34,7 @@ export default {
         } else {
             this.app.setState(data);
         }
+        window.localStorage.setItem('app', JSON.stringify(this.app.state));
     },
     getState(){
         return this.app.state;
