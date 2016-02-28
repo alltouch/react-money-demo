@@ -2,8 +2,12 @@ import React from 'react';
 import Actions from '../../actions';
 
 export default React.createClass({
+    observes: ['currencies'],
+    getInitialState(){
+        return Actions.getData(this);
+    },
     render(){
-        var currencies = Actions.getState().currencies;
+        var currencies = this.state.currencies;
 
         return (
             <select className="form-control"

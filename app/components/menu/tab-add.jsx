@@ -1,10 +1,18 @@
 import React from 'react';
 
-import Actions from '../../actions';
+import Actions from '../actions';
 
 export default React.createClass({
+
+    contextTypes: {
+        router: React.PropTypes.object
+    },
+
     onClick(){
-        Actions.createTab();
+        var tabKey = Actions.createTab();
+        this.context.router.push({
+            pathname: '/' + tabKey
+        });
     },
     render(){
         return (

@@ -1,6 +1,7 @@
 import React from 'react';
+import {Link, IndexLink} from 'react-router';
 
-import Actions from '../../actions';
+import Actions from '../actions';
 
 export default React.createClass({
     getInitialState(){
@@ -8,9 +9,7 @@ export default React.createClass({
             editMode : false
         };
     },
-    onClick(){
-        Actions.selectTab(this.props.tab.key);
-    },
+
     showEditMode(){
         this.setState({
             editMode : true
@@ -40,9 +39,11 @@ export default React.createClass({
     },
     getClassName(){
         var tab = this.props.tab;
+        var activeTabId = this.props.activeTab;
 
         var className = tab.key === 0 ? 'tab-total' : 'tab-editable';
-        className += ' ' + (tab.active ? 'active' : '');
+        className += ' ' + (activeTabId === tab.key ? 'active': '');
+
         return className;
     },
     renderEditMode(){
@@ -64,7 +65,11 @@ export default React.createClass({
 
         return (
             <li className={this.getClassName()}>
-                <a onClick={this.onClick}>{tab.name}</a>
+                {tab.key === 0 ?
+                    <IndexLink to={`/`}>{tab.name}</IndexLink>
+                    :
+                    <Link to={`/${tab.key}`}>{tab.name}</Link>
+                }
                 <span className="glyphicon glyphicon-pencil" onClick={this.showEditMode} />
             </li>
         );

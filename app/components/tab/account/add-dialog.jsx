@@ -1,20 +1,34 @@
 import React from 'react';
+
 import Actions from '../../actions';
+
 import CurrencySelect from '../common/currency-select.jsx';
 
 export default React.createClass({
+    contextTypes: {
+        router: React.PropTypes.object
+    },
     getInitialState(){
+        var activeTab = parseInt(this.props.params.tabId || 0);
+        if(!activeTab){
+            this.closeDialog(0);
+            return null;
+        }
         return {
             model: {
                 name: '',
                 currency: '',
-                amount: '0'
+                amount: '0',
+                tabKey: activeTab
             },
             errors: []
         };
     },
-    closeDialog(){
-        Actions.hideAddDialog();
+    closeDialog(tabKey){
+        tabKey = parseInt(tabKey) || this.state.model.tabKey;
+        this.context.router.push({
+            pathname: '/' + tabKey
+        });
     },
     saveAccount(){
         var model = this.state.model;
@@ -39,6 +53,7 @@ export default React.createClass({
             });
         } else {
             Actions.addAccount(model);
+            this.closeDialog();
         }
     },
     updateModel(name, value){
@@ -56,6 +71,9 @@ export default React.createClass({
     },
     updateCurrency(event){
         this.updateModel('currency', event.target.value);
+    },
+    componentDidMount(){
+        this.refs.input.focus();
     },
     render(){
         var errors = this.state.errors;
@@ -80,7 +98,7 @@ export default React.createClass({
                             {errorsList}
                             <div className="form-group">
                                 <label htmlFor="account-name" className="control-label">Name:</label>
-                                <input className="form-control" id="account-name" value={model.name} onChange={this.updateName} />
+                                <input className="form-control" id="account-name" value={model.name} onChange={this.updateName} ref="input" />
                             </div>
                             <div className="form-group">
                                 <label htmlFor="currency" className="control-label">Currency:</label>

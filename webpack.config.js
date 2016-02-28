@@ -19,7 +19,7 @@ const common = {
 
     entry: {
         app: PATHS.app,
-        vendor: ['react', 'react-dom', 'bootstrap.css']
+        vendor: ['react', 'react-dom', 'react-router', 'bootstrap.css']
     },
     resolve: {
         alias: {

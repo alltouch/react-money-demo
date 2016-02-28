@@ -1,15 +1,18 @@
 import React from 'react';
 
 import './account-list.scss';
-import Actions from './../../actions';
+import Actions from '../../actions';
 import AccountLine from './account-line.jsx';
 
 export default React.createClass({
-
+    observes: ['course'],
+    getInitialState(){
+        return Actions.getData(this);
+    },
     render(){
-        var accounts = Actions.calculateAccounts();
+        var accounts = this.props.accounts;
         var course = {
-            'EUR': Actions.getState().course
+            'EUR': this.state.course
         };
 
         if(!accounts.length){
@@ -29,7 +32,6 @@ export default React.createClass({
             currency: 'USD'
         };
 
-
         return (
             <div className="account-list">
 
@@ -44,7 +46,7 @@ export default React.createClass({
                     </thead>
                     <tbody>
                         {accounts.map(line =>
-                            <AccountLine key={line.tableKey} line={line} />
+                            <AccountLine key={line.key} line={line} />
                         )}
                         <AccountLine key="total" line={total} />
                     </tbody>

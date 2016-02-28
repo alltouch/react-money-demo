@@ -1,5 +1,7 @@
 import React from 'react';
+
 import Actions from '../../actions';
+
 import CurrencySelect from '../common/currency-select.jsx';
 
 export default React.createClass({
