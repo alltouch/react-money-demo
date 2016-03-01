@@ -2,6 +2,7 @@ const path = require('path');
 const webpack = require('webpack');
 const merge = require('webpack-merge');
 const NpmInstallPlugin = require('npm-install-webpack-plugin');
+const CopyWebpackPlugin = require('copy-webpack-plugin');
 
 const TARGET = process.env.npm_lifecycle_event;
 process.env.BABEL_ENV = TARGET;
@@ -12,7 +13,17 @@ const PATHS = {
     build: path.join(__dirname, 'build')
 };
 
-var pathToBootstrap = PATHS.node_modules + '/bootstrap/dist/css/bootstrap.css';
+const dependency = {
+    'bootstrap.css': {
+        'default': PATHS.node_modules + '/bootstrap/dist/css/bootstrap.css',
+        'prod': PATHS.node_modules + '/bootstrap/dist/css/bootstrap.min.css'
+    }
+};
+
+function getPath(lib){
+    var dep = dependency[lib];
+    return dep[TARGET] || dep['default'];
+}
 
 const common = {
 
@@ -23,7 +34,7 @@ const common = {
     },
     resolve: {
         alias: {
-            'bootstrap.css': pathToBootstrap
+            'bootstrap.css': getPath('bootstrap.css')
         },
         extensions: ['', '.js', '.jsx']
     },
@@ -67,6 +78,13 @@ const common = {
     }
 };
 
+var commonPlugins = [
+    new webpack.optimize.CommonsChunkPlugin("vendor", "vendor.bundle.js"),
+    new CopyWebpackPlugin([
+        { from: 'static/index.html' }
+    ])
+];
+
 
 // Default configuration
 if(TARGET === 'start' || !TARGET) {
@@ -97,21 +115,28 @@ if(TARGET === 'start' || !TARGET) {
             host: process.env.HOST,
             port: process.env.PORT || 3388
         },
-        plugins: [
-            new webpack.optimize.CommonsChunkPlugin("vendor", "vendor.bundle.js"),
+        plugins: commonPlugins.concat([
             new webpack.HotModuleReplacementPlugin(),
             new NpmInstallPlugin({
                 save: true // --save
             })
-        ]
+        ])
     });
 }
 
 if(TARGET === 'build') {
     module.exports = merge(common, {
-        plugins: [
-            new webpack.optimize.CommonsChunkPlugin("vendor", "vendor.bundle.js")
-            //new webpack.optimize.UglifyJsPlugin({minimize: true})
-        ]
+        devtool: 'cheap-module-source-map',
+        plugins: commonPlugins.concat([
+
+        ])
+    });
+}
+
+if(TARGET === 'prod') {
+    module.exports = merge(common, {
+        plugins: commonPlugins.concat([
+            new webpack.optimize.UglifyJsPlugin({minimize: true})
+        ])
     });
 }
