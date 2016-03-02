@@ -3,6 +3,10 @@ import React from 'react';
 import Actions from '../actions';
 
 export default React.createClass({
+    propTypes: {
+        activeTab: React.PropTypes.number,
+        totalCount: React.PropTypes.number
+    },
     contextTypes: {
         router: React.PropTypes.object
     },

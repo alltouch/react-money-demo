@@ -22,7 +22,7 @@ const dependency = {
 
 function getPath(lib){
     var dep = dependency[lib];
-    return dep[TARGET] || dep['default'];
+    return dep[TARGET] || dep.default;
 }
 
 const common = {
@@ -35,6 +35,9 @@ const common = {
     resolve: {
         alias: {
             'bootstrap.css': getPath('bootstrap.css')
+            /* import x from 'libs/xxx'
+            libs: path.join(__dirname, 'libs')
+            */
         },
         extensions: ['', '.js', '.jsx']
     },
@@ -43,6 +46,13 @@ const common = {
         filename: 'bundle.js'
     },
     module: {
+        preLoaders: [
+            {
+                test: /\.jsx?$/,
+                loaders: ['eslint'],
+                include: PATHS.app
+            }
+        ],
         loaders: [
             {
                 test: /\.css$/,
@@ -78,7 +88,7 @@ const common = {
     }
 };
 
-var commonPlugins = [
+const commonPlugins = [
     new webpack.optimize.CommonsChunkPlugin("vendor", "vendor.bundle.js"),
     new CopyWebpackPlugin([
         { from: 'static/index.html' }
@@ -136,7 +146,12 @@ if(TARGET === 'build') {
 if(TARGET === 'prod') {
     module.exports = merge(common, {
         plugins: commonPlugins.concat([
-            new webpack.optimize.UglifyJsPlugin({minimize: true})
+            new webpack.optimize.UglifyJsPlugin({
+                minimize: true,
+                compress: {
+                    warnings: false
+                }
+            })
         ])
     });
 }

@@ -5,6 +5,9 @@ import Actions from '../../actions';
 import CurrencySelect from '../common/currency-select.jsx';
 
 export default React.createClass({
+    propTypes: {
+        line: React.PropTypes.object
+    },
     getInitialState(){
         return {
             editMode: false
@@ -100,7 +103,7 @@ export default React.createClass({
 
     renderActions(){
         if(this.props.line.name === 'Total'){
-            return <td/>;
+            return <td />;
         } else if(this.state.editMode) {
             return (
                 <td className="actions">

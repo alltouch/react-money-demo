@@ -7,11 +7,14 @@ import CurrencySelect from '../common/currency-select.jsx';
 import AccountModel from '../../../models/account';
 
 export default React.createClass({
+    propTypes: {
+        params: React.PropTypes.object
+    },
     contextTypes: {
         router: React.PropTypes.object
     },
     getInitialState(){
-        var activeTab = parseInt(this.props.params.tabId || 0);
+        var activeTab = parseInt(this.props.params.tabId || 0, 10);
         if(!activeTab){
             this.closeDialog(0);
             return null;
@@ -25,7 +28,7 @@ export default React.createClass({
         };
     },
     closeDialog(tabId){
-        tabId = parseInt(tabId) || this.state.model.tabId;
+        tabId = parseInt(tabId, 10) || this.state.model.tabId;
         this.context.router.push({
             pathname: '/' + tabId
         });
@@ -94,7 +97,9 @@ export default React.createClass({
                             {errorsList}
                             <div className="form-group">
                                 <label htmlFor="account-name" className="control-label">Name:</label>
-                                <input className="form-control" id="account-name" value={model.name} onChange={this.updateName} ref="input" />
+                                <input className="form-control" id="account-name" value={model.name}
+                                        onChange={this.updateName} ref="input"
+                                />
                             </div>
                             <div className="form-group">
                                 <label htmlFor="currency" className="control-label">Currency:</label>
@@ -102,7 +107,9 @@ export default React.createClass({
                             </div>
                             <div className="form-group">
                                 <label htmlFor="amount" className="control-label">Amount:</label>
-                                <input className="form-control" id="amount" value={model.amount} onChange={this.updateAmount} />
+                                <input className="form-control" id="amount" value={model.amount}
+                                        onChange={this.updateAmount}
+                                />
                             </div>
                         </div>
                         <div className="modal-footer">

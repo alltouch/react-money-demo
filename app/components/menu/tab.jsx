@@ -1,18 +1,23 @@
 import React from 'react';
-import {Link, IndexLink} from 'react-router';
+import { Link, IndexLink } from 'react-router';
 
 import Actions from '../actions';
 
 export default React.createClass({
+    propTypes: {
+        activeTab: React.PropTypes.number,
+        tab: React.PropTypes.object
+    },
+
     getInitialState(){
         return {
-            editMode : false
+            editMode: false
         };
     },
 
     showEditMode(){
         this.setState({
-            editMode : true
+            editMode: true
         });
     },
     hideEditMode(){
@@ -42,7 +47,7 @@ export default React.createClass({
         var activeTabId = this.props.activeTab;
 
         var className = tab.isTotal() ? 'tab-total' : 'tab-editable';
-        className += ' ' + (activeTabId === tab.id ? 'active': '');
+        className += ' ' + (activeTabId === tab.id ? 'active' : '');
 
         return className;
     },
@@ -51,9 +56,10 @@ export default React.createClass({
             <li className={this.getClassName()}>
                 <a>
                     <input className="form-control"
-                           onKeyDown={this.onKeyDown}
-                           defaultValue={this.props.tab.name}
-                           ref="input" />
+                            onKeyDown={this.onKeyDown}
+                            defaultValue={this.props.tab.name}
+                            ref="input"
+                    />
                 </a>
                 <span className="glyphicon glyphicon-ok" onClick={this.saveName} />
                 <span className="glyphicon glyphicon-remove" onClick={this.hideEditMode} />
@@ -83,5 +89,3 @@ export default React.createClass({
         }
     }
 });
-
-

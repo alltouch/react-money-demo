@@ -11,7 +11,7 @@ import AddDialog from './components/tab/account/add-dialog.jsx';
 ReactDOM.render((
     <Router history={browserHistory}>
         <Route path="/" component={App}>
-            <IndexRoute component={TabContent}/>
+            <IndexRoute component={TabContent} />
 
             <Redirect from="/0" to="/" />
 

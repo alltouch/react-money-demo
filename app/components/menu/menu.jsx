@@ -6,6 +6,9 @@ import Tab from './tab.jsx';
 import TabAdd from './tab-add.jsx';
 
 export default React.createClass({
+    propTypes: {
+        activeTab: React.PropTypes.number
+    },
     observes: ['tabs'],
     getInitialState(){
         return Actions.getData(this);
@@ -22,7 +25,7 @@ export default React.createClass({
                 {this.state.tabs.map(tab =>
                     <Tab key={tab.getKey()} tab={tab} activeTab={this.props.activeTab} />
                 )}
-                <TabAdd key="add"/>
+                <TabAdd key="add" />
             </ul>
         );
     }

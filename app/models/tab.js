@@ -16,6 +16,6 @@ export default class TabModel extends Data{
         if(this.isTotal()){
             return '/';
         }
-        return '/' + this.id;
+        return `/${this.id}`;
     }
-};
+}

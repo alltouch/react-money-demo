@@ -5,6 +5,9 @@ import Actions from '../../actions';
 import AccountLine from './account-line.jsx';
 
 export default React.createClass({
+    propTypes: {
+        accounts: React.PropTypes.object
+    },
     observes: ['course'],
     getInitialState(){
         return Actions.getData(this);

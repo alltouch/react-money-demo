@@ -55,11 +55,9 @@ export default {
     },
     fireObservers(keys){
         this.observers.forEach((comp) => {
-            var changed = keys.filter(function (key) {
-               return comp.observes.indexOf(key) > -1;
-            });
+            var changed = keys.filter((key) => comp.observes.indexOf(key) > -1);
 
-            if(changed){
+            if(changed.length){
                 comp.setState(this.getData(changed));
             }
         });
@@ -68,7 +66,7 @@ export default {
         var state = this.state;
         var arr = comp.indexOf ? comp : (comp.observes || []);
 
-        return arr.reduce(function (prev, next) {
+        return arr.reduce((prev, next) => {
             prev[next] = state[next];
             return prev;
         }, {});
@@ -106,7 +104,8 @@ export default {
 
         if(tabs.find(tab => tab.name === name)){
             let index = 1;
-            while(tabs.find(tab => tab.name === name + ' ' + index)){
+            const func = (tab) => tab.name === name + ' ' + index;
+            while(tabs.find(func)){
                 index += 1;
             }
             name = name + ' ' + index;
@@ -146,7 +145,7 @@ export default {
         var len = accounts.size;
         var id = len ? accounts.last().id + 1 : 1;
 
-        model = model.withMutations(function(m){
+        model = model.withMutations((m) => {
             m.set('id', id)
              .set('amount', parseFloat(m.amount));
         });
@@ -167,11 +166,13 @@ export default {
         var accounts = this.state.accounts;
         var index = accounts.findIndex(acc => acc.id === account.id);
 
-        accounts = accounts.update(index, function (account) {
-            return account.set('name', changes.name)
+        /* eslint-disable arrow-body-style */
+        accounts = accounts.update(index, (acc) => {
+            return acc.set('name', changes.name)
                     .set('currency', changes.currency)
                     .set('amount', parseFloat(changes.amount));
         });
+        /* eslint-enable arrow-body-style */
 
         this.setState({
             accounts

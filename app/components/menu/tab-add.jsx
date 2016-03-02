@@ -22,5 +22,3 @@ export default React.createClass({
         );
     }
 });
-
-

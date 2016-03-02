@@ -7,6 +7,10 @@ import AccountList from './account/list.jsx';
 import AddAccountButton from './add-account-button.jsx';
 
 export default React.createClass({
+    propTypes: {
+        params: React.PropTypes.object,
+        children: React.PropTypes.node
+    },
     observes: ['tabs', 'accounts', 'currency'],
     getInitialState(){
         return Actions.getData(this);
@@ -18,12 +22,12 @@ export default React.createClass({
         Actions.removeObserver(this);
     },
     render(){
-        var activeTab = parseInt(this.props.params.tabId || 0);
+        var activeTab = parseInt(this.props.params.tabId || 0, 10);
         var tabs = this.state.tabs;
         var currency = this.state.currency;
 
         var accounts = this.state.accounts
-            .filter(function (account) {
+            .filter((account) => {
                 if(activeTab > 0 && account.tabId !== activeTab){
                     return false;
                 }
@@ -32,7 +36,7 @@ export default React.createClass({
                 }
                 return true;
             })
-            .map(function (account) {
+            .map((account) => {
                 var tabName = tabs.find(tab => tab.id === account.tabId).name;
 
                 return account.set('tabName', tabName);
