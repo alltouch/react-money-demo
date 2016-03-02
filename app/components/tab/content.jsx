@@ -24,7 +24,7 @@ export default React.createClass({
 
         var accounts = this.state.accounts
             .filter(function (account) {
-                if(activeTab > 0 && account.tabKey !== activeTab){
+                if(activeTab > 0 && account.tabId !== activeTab){
                     return false;
                 }
                 if(currency !== 'All' && account.currency !== currency){
@@ -33,14 +33,12 @@ export default React.createClass({
                 return true;
             })
             .map(function (account) {
-                var tabName = tabs.filter(tab => tab.key === account.tabKey)[0].name;
+                var tabName = tabs.find(tab => tab.id === account.tabId).name;
 
-                return Object.assign({
-                   tabName
-                }, account);
+                return account.set('tabName', tabName);
             });
 
-        var totalCount = this.state.accounts.filter(account => account.tabKey === activeTab).length;
+        var totalCount = this.state.accounts.filter(account => account.tabId === activeTab).size;
 
         return (
             <div>

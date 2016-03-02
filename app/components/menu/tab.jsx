@@ -22,7 +22,7 @@ export default React.createClass({
     },
     saveName(){
         Actions.editTabName(
-            this.props.tab.key,
+            this.props.tab.id,
             this.refs.input.value
         );
         this.hideEditMode();
@@ -41,8 +41,8 @@ export default React.createClass({
         var tab = this.props.tab;
         var activeTabId = this.props.activeTab;
 
-        var className = tab.key === 0 ? 'tab-total' : 'tab-editable';
-        className += ' ' + (activeTabId === tab.key ? 'active': '');
+        var className = tab.isTotal() ? 'tab-total' : 'tab-editable';
+        className += ' ' + (activeTabId === tab.id ? 'active': '');
 
         return className;
     },
@@ -65,10 +65,10 @@ export default React.createClass({
 
         return (
             <li className={this.getClassName()}>
-                {tab.key === 0 ?
-                    <IndexLink to={`/`}>{tab.name}</IndexLink>
+                {tab.isTotal() ?
+                    <IndexLink to={tab.getUrl()}>{tab.name}</IndexLink>
                     :
-                    <Link to={`/${tab.key}`}>{tab.name}</Link>
+                    <Link to={tab.getUrl()}>{tab.name}</Link>
                 }
                 <span className="glyphicon glyphicon-pencil" onClick={this.showEditMode} />
             </li>

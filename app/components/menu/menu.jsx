@@ -20,7 +20,7 @@ export default React.createClass({
         return (
             <ul className="nav nav-tabs main-menu">
                 {this.state.tabs.map(tab =>
-                    <Tab key={tab.key} tab={tab} activeTab={this.props.activeTab} />
+                    <Tab key={tab.getKey()} tab={tab} activeTab={this.props.activeTab} />
                 )}
                 <TabAdd key="add"/>
             </ul>

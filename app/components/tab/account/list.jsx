@@ -15,7 +15,7 @@ export default React.createClass({
             'EUR': this.state.course
         };
 
-        if(!accounts.length){
+        if(!accounts.size){
             return <div className="account-list empty">No accounts</div>;
         }
 
@@ -46,7 +46,7 @@ export default React.createClass({
                     </thead>
                     <tbody>
                         {accounts.map(line =>
-                            <AccountLine key={line.key} line={line} />
+                            <AccountLine key={line.getKey()} line={line} />
                         )}
                         <AccountLine key="total" line={total} />
                     </tbody>

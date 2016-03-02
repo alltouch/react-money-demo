@@ -1,16 +1,31 @@
+import Immutable from 'immutable';
+import TabModel from '../models/tab';
+import AccountModel from '../models/account';
+
 function initialData(){
     var data = window.localStorage.getItem('app');
 
-    return data ? JSON.parse(data) : createData();
+    return data ? parseData(data) : createData();
+}
+
+function parseData(data){
+    var result = JSON.parse(data);
+
+    result.tabs = Immutable.List(result.tabs.map(tab => new TabModel(tab)));
+    result.accounts = Immutable.List(result.accounts.map(tab => new AccountModel(tab)));
+
+    return result;
 }
 
 function createData(){
+    var totalTab = new TabModel({
+        id: 0,
+        name: 'Total'
+    });
+
     return {
-        tabs: [{
-            key: 0,
-            name: 'Total'
-        }],
-        accounts: [],
+        tabs: Immutable.List.of(totalTab),
+        accounts: Immutable.List(),
 
         currencies: ['USD', 'EUR'],
         currency: 'All',
@@ -19,9 +34,13 @@ function createData(){
 }
 
 function saveData(data){
+    var json = Object.assign({}, data);
+    json.tabs = json.tabs.toJS();
+    json.accounts = json.accounts.toJS();
+
     window.localStorage.setItem(
         'app',
-        JSON.stringify(data)
+        JSON.stringify(json)
     );
 }
 
@@ -72,52 +91,48 @@ export default {
     },
 
 
-    editTabName(key, name){
+    editTabName(id, name){
         var tabs = this.state.tabs;
-        var tab = tabs.filter(tab => tab.key === key)[0];
-        tab.name = name;
+        var index = tabs.findIndex(tab => tab.id === id);
 
         this.setState({
-            tabs
+            tabs: tabs.update(index, tab => tab.set('name', name))
         });
     },
 
     createTab(name = "New Tab"){
         var tabs = this.state.tabs;
-        var key = tabs[tabs.length - 1].key + 1;
+        var key = tabs.last().id + 1;
 
-        if(tabs.filter(tab => tab.name === name).length > 0){
+        if(tabs.find(tab => tab.name === name)){
             let index = 1;
-            while(tabs.filter(tab => tab.name === name + ' ' + index).length > 0){
+            while(tabs.find(tab => tab.name === name + ' ' + index)){
                 index += 1;
             }
             name = name + ' ' + index;
         }
 
-        tabs.push({
-            key,
+        var tab = new TabModel({
+            id: key,
             name
         });
 
         this.setState({
-            tabs
+            tabs: tabs.push(tab)
         });
 
-        return key;
+        return tab;
     },
 
-    removeTab(key){
+    removeTab(id){
         var tabs = this.state.tabs;
-        var active = tabs.filter(tab => tab.key === key)[0];
-        var index = tabs.indexOf(active);
-        tabs.splice(index, 1);
-
+        var index = tabs.findIndex(tab => tab.id === id);
 
         this.setState({
-            tabs
+            tabs: tabs.remove(index)
         });
 
-        return tabs[index - 1].key;
+        return tabs.get(index - 1);
     },
 
     setCurrency(currency){
@@ -127,34 +142,36 @@ export default {
     },
 
     addAccount(model){
-        model.amount = parseFloat(model.amount);
         var accounts = this.state.accounts;
-        var len = accounts.length;
+        var len = accounts.size;
+        var id = len ? accounts.last().id + 1 : 1;
 
-        model.key = len > 0 ? accounts[len - 1].key + 1 : 1;
-        accounts.push(model);
+        model = model.withMutations(function(m){
+            m.set('id', id)
+             .set('amount', parseFloat(m.amount));
+        });
 
         this.setState({
-            accounts
+            accounts: accounts.push(model)
         });
     },
     removeAccount(account){
         var accounts = this.state.accounts;
-        var index = accounts.indexOf(account);
-
-        accounts.splice(index, 1);
+        var index = accounts.findIndex(acc => acc.id === account.id);
 
         this.setState({
-            accounts
+            accounts: accounts.remove(index)
         });
     },
     updateAccount(account, changes){
         var accounts = this.state.accounts;
-        var current = accounts.filter(acc => acc.key === account.key)[0];
+        var index = accounts.findIndex(acc => acc.id === account.id);
 
-        current.name = changes.name;
-        current.currency = changes.currency;
-        current.amount = parseFloat(changes.amount);
+        accounts = accounts.update(index, function (account) {
+            return account.set('name', changes.name)
+                    .set('currency', changes.currency)
+                    .set('amount', parseFloat(changes.amount));
+        });
 
         this.setState({
             accounts

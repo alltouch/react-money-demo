@@ -1,8 +1,10 @@
 import React from 'react';
+import Immutable from 'immutable';
 
 import Actions from '../../actions';
 
 import CurrencySelect from '../common/currency-select.jsx';
+import AccountModel from '../../../models/account';
 
 export default React.createClass({
     contextTypes: {
@@ -14,40 +16,35 @@ export default React.createClass({
             this.closeDialog(0);
             return null;
         }
+
         return {
-            model: {
-                name: '',
-                currency: '',
-                amount: '0',
-                tabKey: activeTab
-            },
-            errors: []
+            model: new AccountModel({
+                tabId: activeTab
+            }),
+            errors: Immutable.List()
         };
     },
-    closeDialog(tabKey){
-        tabKey = parseInt(tabKey) || this.state.model.tabKey;
+    closeDialog(tabId){
+        tabId = parseInt(tabId) || this.state.model.tabId;
         this.context.router.push({
-            pathname: '/' + tabKey
+            pathname: '/' + tabId
         });
     },
     saveAccount(){
         var model = this.state.model;
-        var errors = [];
+        var errors = this.state.errors.clear();
 
         if(model.name.length < 2){
-            errors.push('Account name is too small');
+            errors = errors.push('Account name is too small');
         }
         if(!model.currency){
-            errors.push('Choose currency');
-        }
-        if(!model.amount){
-            model.amount = '0';
+            errors = errors.push('Choose currency');
         }
         if(Number.isNaN(parseFloat(model.amount))){
-            errors.push('Type correct number');
+            errors = errors.push('Type correct number');
         }
 
-        if(errors.length){
+        if(errors.size){
             this.setState({
                 errors
             });
@@ -58,9 +55,8 @@ export default React.createClass({
     },
     updateModel(name, value){
         var model = this.state.model;
-        model[name] = value;
         this.setState({
-            model
+            model: model.set(name, value)
         });
     },
     updateName(event){
@@ -79,7 +75,7 @@ export default React.createClass({
         var errors = this.state.errors;
         var model = this.state.model;
         var errorsList = '';
-        if(errors.length){
+        if(errors.size){
             errorsList = (
                 <div className="alert alert-danger">
                     {errors.map(error => <div>{error}</div>)}

@@ -9,9 +9,9 @@ export default React.createClass({
     },
 
     onClick(){
-        var tabKey = Actions.createTab();
+        var tab = Actions.createTab();
         this.context.router.push({
-            pathname: '/' + tabKey
+            pathname: tab.getUrl()
         });
     },
     render(){

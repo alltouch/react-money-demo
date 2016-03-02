@@ -7,9 +7,9 @@ export default React.createClass({
         router: React.PropTypes.object
     },
     onRemoveClick(){
-        var tabKey = Actions.removeTab(this.props.activeTab);
+        var tab = Actions.removeTab(this.props.activeTab);
         this.context.router.push({
-            pathname: '/' + tabKey
+            pathname: tab.getUrl()
         });
     },
     render(){
