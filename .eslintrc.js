@@ -3,7 +3,8 @@ module.exports = {
     "parserOptions": {
         "ecmaVersion": 6,
         "ecmaFeatures": {
-            "jsx": true
+            "jsx": true,
+            "experimentalObjectRestSpread": true
         },
         "sourceType": "module"
     },
@@ -41,6 +42,7 @@ module.exports = {
         "react/sort-comp": 0,
         "react/jsx-indent-props": [2, 8],
         "vars-on-top": 0,
-        "no-param-reassign": 0
+        "no-param-reassign": 0,
+        "prefer-const": 0
     }
 };

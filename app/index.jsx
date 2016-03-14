@@ -1,25 +1,20 @@
 import 'bootstrap.css';
 
 import React from 'react';
-import { Router, Route, Redirect, IndexRoute, browserHistory } from 'react-router';
-import ReactDOM from 'react-dom';
+import { render } from 'react-dom';
+import { Router, browserHistory } from 'react-router';
+import { Provider } from 'react-redux';
+import { syncHistoryWithStore } from 'react-router-redux';
+import { configureStore } from './store';
+import routes from './routes';
 
-import App from './components/app/app.jsx';
-import TabContent from './components/tab/content.jsx';
-import AddDialog from './components/tab/account/add-dialog.jsx';
+const store = configureStore(browserHistory);
+const history = syncHistoryWithStore(browserHistory, store);
 
-ReactDOM.render((
-    <Router history={browserHistory}>
-        <Route path="/" component={App}>
-            <IndexRoute component={TabContent} />
-
-            <Redirect from="/0" to="/" />
-
-            <Route path=":tabId" component={TabContent}>
-                <Route path="add" component={AddDialog} />
-            </Route>
-        </Route>
-    </Router>
+render((
+    <Provider store={store}>
+        <Router history={history} routes={routes} />
+    </Provider>
     ),
     document.getElementById('app')
 );

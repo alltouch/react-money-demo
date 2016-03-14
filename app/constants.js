@@ -1,0 +1,10 @@
+
+export const CREATE_TAB = 'CREATE_TAB';
+export const REMOVE_TAB = 'REMOVE_TAB';
+export const RENAME_TAB = 'RENAME_TAB';
+
+export const CREATE_ACCOUNT = 'CREATE_ACCOUNT';
+export const REMOVE_ACCOUNT = 'REMOVE_ACCOUNT';
+export const UPDATE_ACCOUNT = 'UPDATE_ACCOUNT';
+
+export const SELECT_CURRENCY = 'SELECT_CURRENCY';

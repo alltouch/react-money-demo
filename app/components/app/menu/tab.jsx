@@ -1,73 +1,74 @@
 import React from 'react';
 import { Link, IndexLink } from 'react-router';
 
-import Actions from '../actions';
+export default class Tab extends React.Component {
 
-export default React.createClass({
-    propTypes: {
-        activeTab: React.PropTypes.number,
-        tab: React.PropTypes.object
-    },
+    constructor(props){
+        super(props);
 
-    getInitialState(){
-        return {
+        this.state = {
             editMode: false
         };
-    },
+    }
 
-    showEditMode(){
+    setEditMode(state){
         this.setState({
-            editMode: true
+            editMode: state
         });
-    },
-    hideEditMode(){
-        this.setState({
-            editMode: false
-        });
-    },
+    }
+
     saveName(){
-        Actions.editTabName(
+        this.props.editTabAction(
             this.props.tab.id,
             this.refs.input.value
         );
-        this.hideEditMode();
-    },
+        this.setEditMode(false);
+    }
+
     onKeyDown(event){
         if(event.keyCode === 13){
             this.saveName();
         } else if(event.keyCode === 27){
-            this.hideEditMode();
+            this.setEditMode(false);
         }
-    },
+    }
+
     render(){
         return this.state.editMode ? this.renderEditMode() : this.renderTextMode();
-    },
+    }
+
     getClassName(){
-        var tab = this.props.tab;
-        var activeTabId = this.props.activeTab;
+        let { tab, activeTab } = this.props;
 
         var className = tab.isTotal() ? 'tab-total' : 'tab-editable';
-        className += ' ' + (activeTabId === tab.id ? 'active' : '');
+        className += ' ' + (activeTab === tab.id ? 'active' : '');
 
         return className;
-    },
+    }
+
     renderEditMode(){
+        let onKeyDown = this.onKeyDown.bind(this);
+        let saveName = this.saveName.bind(this);
+        let hideEditMode = this.setEditMode.bind(this, false);
+
         return (
             <li className={this.getClassName()}>
                 <a>
                     <input className="form-control"
-                            onKeyDown={this.onKeyDown}
+                            onKeyDown={onKeyDown}
                             defaultValue={this.props.tab.name}
                             ref="input"
                     />
                 </a>
-                <span className="glyphicon glyphicon-ok" onClick={this.saveName} />
-                <span className="glyphicon glyphicon-remove" onClick={this.hideEditMode} />
+                <span className="glyphicon glyphicon-ok" onClick={saveName} />
+                <span className="glyphicon glyphicon-remove" onClick={hideEditMode} />
             </li>
         );
-    },
+    }
+
     renderTextMode(){
-        var tab = this.props.tab;
+        let tab = this.props.tab;
+        let showEditMode = this.setEditMode.bind(this, true);
 
         return (
             <li className={this.getClassName()}>
@@ -76,10 +77,11 @@ export default React.createClass({
                     :
                     <Link to={tab.getUrl()}>{tab.name}</Link>
                 }
-                <span className="glyphicon glyphicon-pencil" onClick={this.showEditMode} />
+                <span className="glyphicon glyphicon-pencil" onClick={showEditMode} />
             </li>
         );
-    },
+    }
+
     componentDidUpdate(){
         var input = this.refs.input;
         if(input) {
@@ -88,4 +90,10 @@ export default React.createClass({
             input.selectionEnd = input.value.length;
         }
     }
-});
+}
+
+Tab.propTypes = {
+    activeTab: React.PropTypes.number,
+    tab: React.PropTypes.object,
+    editTabAction: React.PropTypes.func
+};
