@@ -28,10 +28,22 @@ export function createTab(name = "New Tab"){
 }
 
 export function removeTab(id){
-    return {
-        type: REMOVE_TAB,
-        id
-    };
+    return function(dispatch, getState){
+
+        let tabs = getState().tabs;
+        let index = tabs.findIndex(tab => tab.id === id);
+
+        dispatch({
+            type: REMOVE_TAB,
+            id
+        });
+
+        let url = tabs.get(index - 1).getUrl();
+
+        dispatch(push(url));
+
+    }
+
 }
 
 export function renameTab(id, name){

@@ -2,16 +2,21 @@ import React from 'react';
 import { connect } from 'react-redux';
 
 import './app.scss';
-import { createTab, renameTab } from '../../actions/tabs';
+import { createTab, renameTab, removeTab } from '../../actions/tabs';
+import { selectCurrency } from '../../actions/ui'
 import Menu from './menu/menu.jsx';
+import RemoveTabButton from './remove-tab-button.jsx';
+import CurrencyList from './currency-list.jsx';
 
 class AppContainer extends React.Component {
     render(){
-        let activeTab = parseInt(this.props.params.tabId, 10) || 0;
+        let props = this.props;
 
         return (
             <div>
-                <Menu {...this.props} activeTab={activeTab} />
+                <Menu {...props} />
+                <RemoveTabButton {...props} />
+                <CurrencyList {...props} />
 
                 {this.props.children}
             </div>
@@ -23,13 +28,23 @@ AppContainer.propTypes = {
     params: React.PropTypes.object,
     children: React.PropTypes.node,
     tabs: React.PropTypes.object,
+    selectedCurrency: React.PropTypes.string,
     addTabAction: React.PropTypes.func,
-    editTabAction: React.PropTypes.func
+    editTabAction: React.PropTypes.func,
+    selectCurrencyAction: React.PropTypes.func
 };
 
-function stateToProps(state){
+function calculateTotalCount(state, activeTab){
+    return state.accounts.filter(account => account.tabId === activeTab).size;
+}
+
+function stateToProps(state, props){
+    let activeTab = parseInt(props.params.tabId, 10) || 0;
     return {
-        tabs: state.tabs
+        activeTab,
+        selectedCurrency: state.ui.get('currency'),
+        tabs: state.tabs,
+        totalCount: calculateTotalCount(state, activeTab)
     };
 }
 
@@ -40,6 +55,12 @@ function dispatchToProps(dispatch){
         },
         editTabAction(id, name){
             dispatch(renameTab(id, name));
+        },
+        removeTabAction(id){
+            dispatch(removeTab(id));
+        },
+        selectCurrencyAction(name){
+            dispatch(selectCurrency(name));
         }
     };
 }

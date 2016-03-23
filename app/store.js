@@ -34,8 +34,12 @@ function getInitialState(){
 
     let result = JSON.parse(data);
 
-    result.tabs = Immutable.List(result.tabs.map(tab => new TabModel(tab)));
-    result.accounts = Immutable.List(result.accounts.map(tab => new AccountModel(tab)));
-
-    return result;
+    return {
+        tabs: Immutable.List(result.tabs.map(tab => new TabModel(tab))),
+        accounts: Immutable.List(result.accounts.map(tab => new AccountModel(tab))),
+        ui: Immutable.Map({
+            currency: result.currency,
+            course: result.course
+        })
+    };
 }

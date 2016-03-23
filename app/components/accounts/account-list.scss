@@ -1,0 +1,38 @@
+.account-list{
+    margin-top: 30px;
+
+    table{
+        margin-top: 20px;
+        clear: both;
+
+        td + td{
+            text-align: center;
+        }
+
+        .glyphicon{
+            cursor: pointer;
+        }
+
+        .glyphicon-ok{
+            color: green;
+        }
+
+        .glyphicon-remove{
+            color: red;
+        }
+
+        .glyphicon-pencil, .glyphicon-ok{
+            margin-right: 20px;
+        }
+
+        .actions{
+            vertical-align: middle;
+        }
+    }
+
+    .btn-danger{
+        margin-bottom: 15px;
+    }
+
+
+}
